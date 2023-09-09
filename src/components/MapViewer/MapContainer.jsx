@@ -42,6 +42,16 @@ const MapContainer = () => {
     });
 
     view.ui.add(basemapToggle, "bottom-right");
+
+    var searchWidget = new Search({
+      view: view,
+    });
+
+    // Add the search widget to the top right corner of the view
+    view.ui.add(searchWidget, {
+      position: "top-right",
+    });
+
     const basemapGallery = new BasemapGallery({
       view: view,
       source: {
@@ -52,14 +62,8 @@ const MapContainer = () => {
     });
     view.ui.add(basemapGallery, "top-right"); // Add to the view
 
-    var searchWidget = new Search({
-      view: view,
-    });
-
-    // Add the search widget to the top right corner of the view
-    view.ui.add(searchWidget, {
-      position: "top-left",
-    });
+    view.ui.add(basemapGallery, "top-right");
+    view.ui._removeComponents(["attribution"]);
   }, []);
 
   return (

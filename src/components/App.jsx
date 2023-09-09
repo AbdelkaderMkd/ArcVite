@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Layout, Menu } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
-import MapContainer from "./components/MapContainer";
+import MapContainer from "./MapViewer/MapContainer";
 import "./App.css";
-
+const blue = "#001528"
 function App() {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState("map");
 
   const onClick = (e) => {
     console.log("click ", e);
@@ -20,28 +20,27 @@ function App() {
         height: "100vh",
       }}
     >
-      <Layout.Sider style={{ display: "flex", alignItems: "center" }}>
-        <div className="demo-logo" />
+      <Header style={{ display: "flex", alignItems: "center" }}>
+        <div style={{color: "white"}} >ArcVite 🌍⚡️</div>
         <Menu
           theme="dark"
-          // mode="vertical"
+          mode="horizontal"
           onClick={onClick}
-          defaultSelectedKeys={0}
           selectedKeys={[current]}
           items={[
             {
-              key: 0,
+              key: "map",
               label: `Map`,
             },
             {
-              key: 1,
+              key: "info",
               label: `Info`,
             },
           ]}
         />
-      </Layout.Sider>
+      </Header>
       <MapContainer />
-      <Footer style={{ backgroundColor: "palegoldenrod" }}>Arcgis Viewer</Footer>
+      <Footer style={{ backgroundColor: blue, color: "white" }}>ArcVite 🌍⚡️</Footer>
     </Layout>
   );
 }
