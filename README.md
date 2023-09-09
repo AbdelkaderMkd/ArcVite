@@ -6,6 +6,10 @@
 
 This project is a web map viewer application that demonstrates the features of the [ArcGIS JavaScript API](https://developers.arcgis.com/javascript/latest/). The official ArcGIS documentation lacks relevant examples for using JavaScript with ES Modules and modern frameworks like React (Vue, Angular..). To address this gap, I have created a modern and up-to-date project that summarizes the popular features with a simple and minimal setup to help you get started.
 
+## Demo
+
+[Live preview](https://abdelkadermkd.github.io/ArcVite/)
+
 ## ✨Features
 
 - Display a Map
