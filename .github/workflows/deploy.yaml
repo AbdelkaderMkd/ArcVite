@@ -8,10 +8,10 @@ on:
   # Allows for manual triggering of the workflow from the Actions tab
   workflow_dispatch:
 
-# Permissions needed for this workflow
-permissions:
-  contents: read  # Read the repository contents
-  pages: write    # Write permissions for GitHub Pages deployments
+# # Permissions needed for this workflow
+# permissions:
+#   contents: read  # Read the repository contents
+#   pages: write    # Write permissions for GitHub Pages deployments
 
 # Ensure only one deployment runs at a time to avoid conflicts
 concurrency:
