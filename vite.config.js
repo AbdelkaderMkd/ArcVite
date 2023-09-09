@@ -7,4 +7,5 @@ export default defineConfig({
   server: {
     port: 2507,
   },
+  base:'/ArcVite/'
 })
