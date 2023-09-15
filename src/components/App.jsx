@@ -2,26 +2,48 @@ import { useState } from "react";
 import { Layout, Menu } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
 import MapContainer from "./MapViewer/MapContainer";
+import SceneContainer from "./SceneViewer/SceneContainer";
+import esriConfig from "@arcgis/core/config";
 import "./App.css";
-const blue = "#001528"
+import StatisticContainer from "./Statistic/StatisticContainer";
+const blue = "#001528";
+const gray = "#242424";
+const apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
+esriConfig.apiKey = apiKey;
+
 function App() {
   const [current, setCurrent] = useState("map");
 
   const onClick = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
+  };
+
+  const containerHandler = () => {
+    switch (current) {
+      case "map":
+        return <MapContainer />;
+
+      case "scene":
+        return <SceneContainer />;
+
+      case "statistic":
+        return <StatisticContainer />;
+
+      default:
+        return <div>Not Found</div>;
+    }
   };
 
   return (
     <Layout
       className="layout"
       style={{
-        backgroundColor: "#e1efe1",
+        // backgroundColor: gray,
         height: "100vh",
       }}
     >
       <Header style={{ display: "flex", alignItems: "center" }}>
-        <div style={{color: "white"}} >ArcVite 🌍⚡️</div>
+        <div style={{ color: "white" }}>ArcVite 🌍⚡️</div>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -33,13 +55,17 @@ function App() {
               label: `Map`,
             },
             {
-              key: "info",
-              label: `Info`,
+              key: "scene",
+              label: `Scene`,
+            },
+            {
+              key: "statistic",
+              label: `Statistic`,
             },
           ]}
         />
       </Header>
-      <MapContainer />
+      {containerHandler()}
       <Footer style={{ backgroundColor: blue, color: "white" }}>ArcVite 🌍⚡️</Footer>
     </Layout>
   );

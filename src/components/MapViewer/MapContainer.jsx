@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { AutoComplete, Button, Layout } from "antd";
+import { AutoComplete, Button, Layout, Spin } from "antd";
 import { Content } from "antd/es/layout/layout";
 import esriConfig from "@arcgis/core/config";
 import Map from "@arcgis/core/Map";
@@ -7,11 +7,16 @@ import MapView from "@arcgis/core/views/MapView";
 import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
 import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
 import Search from "@arcgis/core/widgets/Search";
-const apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
+import Editor from "@arcgis/core/widgets/Editor";
+import { addBasemapGallery } from "./MapWidget/BaseMapGallery";
+import Spinner from "../common/Spinner";
+// const apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
 
 const MapContainer = () => {
   const mapDiv = useRef(null);
-  esriConfig.apiKey = apiKey;
+  const [isLoading, setIsLoading] = useState(true); // Add this state
+
+  // esriConfig.apiKey = apiKey;
 
   useEffect(() => {
     // Create a Map instance
@@ -23,8 +28,11 @@ const MapContainer = () => {
     const view = new MapView({
       container: mapDiv.current,
       map: map,
-      zoom: 4,
-      center: [15, 65], // Longitude, latitude
+      zoom: 8,
+      center: [3.2, 36.6], // Longitude, latitude
+      ui: {
+        components: ["zoom", "compass","navigation-toggle"]
+    }
     });
     view
       .when(() => {
@@ -32,9 +40,11 @@ const MapContainer = () => {
       })
       .then(() => {
         console.log("view loaded");
+        setIsLoading(false);
       })
-      .catch(() => {
-        console.log("error while loading view ");
+      .catch((err) => {
+        console.log("error while loading view ",err);
+        setIsLoading(false);
       });
     const basemapToggle = new BasemapToggle({
       view: view,
@@ -52,18 +62,49 @@ const MapContainer = () => {
       position: "top-right",
     });
 
-    const basemapGallery = new BasemapGallery({
-      view: view,
-      source: {
-        query: {
-          title: '"World Basemaps for Developers" AND owner:esri',
-        },
-      },
-    });
-    view.ui.add(basemapGallery, "top-right"); // Add to the view
+    addBasemapGallery(view);
 
-    view.ui.add(basemapGallery, "top-right");
-    view.ui._removeComponents(["attribution"]);
+    // const editor = new Editor({
+    //   view: view,
+    // });
+
+    // view.ui.add(editor, "top-right");
+    // view.popupEnabled = false; // Disable the default popup behavior
+
+    // view.on("click", function (event) {
+    //   // Listen for the click event
+    //   view.hitTest(event).then(function (hitTestResults) {
+    //     // Search for features where the user clicked
+    //     if (hitTestResults.results) {
+    //       view.openPopup({
+    //         // open a popup to show some of the results
+    //         location: event.mapPoint,
+    //         title: "Hit Test Results",
+    //         content: hitTestResults.results.length + "Features Found",
+    //       });
+    //     }
+    //   });
+    // });
+    // view.ui._removeComponents(["attribution"]);
+
+    //clean up
+    return () => {
+      console.log("psst clean up map");
+      if (view && view.ready) {
+        console.log("destroy map view");
+        // Remove any event listeners, if you've added any
+        // e.g., view.on("click", someFunction);
+
+        // Destroy the view to release resources
+        view.destroy();
+      }
+      if (mapDiv.current) {
+        // Do something with the data
+        console.log("something with the data");
+
+      }
+    };
+
   }, []);
 
   return (
@@ -74,31 +115,10 @@ const MapContainer = () => {
         height: "100vh",
       }}
     >
-      {/* <Button
-        // onClick={() => setShowModal(true)}
-        style={
-          {
-            //   fontSize: "16px",
-            //   width: 128,
-            //   height: 128,
-          }
-        }
-      >
-        Ajouter
-      </Button>
-      <AutoComplete
-        // options={options}
-        style={{
-          width: 200,
-        }}
-        // onSelect={onSelect}
-        // onSearch={(text) => setOptions(getPanelValue(text))}
-        // onChange={searchHandler}
-        placeholder="Recherche"
-      /> */}
-      <div ref={mapDiv} style={{ width: "100%", height: "100%" }} />
-      {/* <FormPlant fetchData={fetchData} showModal={showModal} modalHandler={modalHandler} setItemData={setItemData} itemData={itemData} />
-      <Datatable fetchData={fetchData} tableData={tableData} modalHandler={modalHandler} setItemData={setItemData} /> */}
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+        {isLoading && (<Spinner/>)}
+        <div ref={mapDiv} style={{ width: "100%", height: "100%" }} />
+      </div>
     </Content>
   );
 };
