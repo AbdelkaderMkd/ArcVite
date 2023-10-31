@@ -1,7 +1,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Content } from "antd/es/layout/layout";
-
+import Widget from "../common/Widget";
+import "./Statistic.css"
 
 
 const StatisticContainer = () => {
@@ -15,9 +16,11 @@ const StatisticContainer = () => {
       }}
     >
       <div style={{ width: "100%", height: "100%" }} >
-        <div>
+        <div style={{ color: "black", padding:"20px"}}>
             Statistic
         </div>
+        {Widget()}
+
       </div>
     </Content>
   );

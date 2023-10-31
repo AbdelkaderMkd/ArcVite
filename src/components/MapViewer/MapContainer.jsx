@@ -1,15 +1,18 @@
 import { useEffect, useState, useRef } from "react";
-import { AutoComplete, Button, Layout, Spin } from "antd";
 import { Content } from "antd/es/layout/layout";
+import Spinner from "../common/Spinner";
 import esriConfig from "@arcgis/core/config";
 import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
-import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
-import Search from "@arcgis/core/widgets/Search";
 import Editor from "@arcgis/core/widgets/Editor";
-import { addBasemapGallery } from "./MapWidget/BaseMapGallery";
-import Spinner from "../common/Spinner";
+import { addBasemapGallery } from "./MapWidget/BasemapGallery";
+import { addBasemapToggl } from "./MapWidget/BasemapToggle";
+import { addSearch } from "./MapWidget/Search";
+import { addScaleBar } from "./MapWidget/ScaleBar";
+import { addFullScreen } from "./MapWidget/Fullscreen";
+import { addFeatureLayer } from "./MapWidget/FeatureLayer";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
+
 // const apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
 
 const MapContainer = () => {
@@ -17,8 +20,7 @@ const MapContainer = () => {
   const [isLoading, setIsLoading] = useState(true); // Add this state
 
   // esriConfig.apiKey = apiKey;
-
-  useEffect(() => {
+  const initMapViewer = () => {
     // Create a Map instance
     const map = new Map({
       basemap: "topo-vector", // This is one of many basemaps available.
@@ -28,12 +30,17 @@ const MapContainer = () => {
     const view = new MapView({
       container: mapDiv.current,
       map: map,
-      zoom: 8,
-      center: [3.2, 36.6], // Longitude, latitude
+      zoom: 12,
+      center: [3.1, 36.75], // Longitude, latitude
       ui: {
-        components: ["zoom", "compass","navigation-toggle"]
-    }
+        components: ["zoom", "compass"],
+      },
     });
+    return view;
+  };
+
+  useEffect(() => {
+    const view = initMapViewer();
     view
       .when(() => {
         console.log("view loading..");
@@ -43,26 +50,23 @@ const MapContainer = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log("error while loading view ",err);
+        console.log("error while loading view ", err);
         setIsLoading(false);
       });
-    const basemapToggle = new BasemapToggle({
-      view: view,
-      nextBasemap: "arcgis-imagery",
-    });
 
-    view.ui.add(basemapToggle, "bottom-right");
+    addBasemapToggl(view);
 
-    var searchWidget = new Search({
-      view: view,
-    });
-
-    // Add the search widget to the top right corner of the view
-    view.ui.add(searchWidget, {
-      position: "top-right",
-    });
+    addSearch(view);//update
 
     addBasemapGallery(view);
+
+    addScaleBar(view);
+
+    // addFullScreen(view); //pb
+
+    // addFeatureLayer(view); // revoir les layers + activé/désactivé
+
+
 
     // const editor = new Editor({
     //   view: view,
@@ -98,13 +102,7 @@ const MapContainer = () => {
         // Destroy the view to release resources
         view.destroy();
       }
-      if (mapDiv.current) {
-        // Do something with the data
-        console.log("something with the data");
-
-      }
     };
-
   }, []);
 
   return (
@@ -116,7 +114,7 @@ const MapContainer = () => {
       }}
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        {isLoading && (<Spinner/>)}
+        {isLoading && <Spinner />}
         <div ref={mapDiv} style={{ width: "100%", height: "100%" }} />
       </div>
     </Content>

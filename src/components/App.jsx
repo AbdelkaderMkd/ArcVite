@@ -42,8 +42,8 @@ function App() {
         height: "100vh",
       }}
     >
-      <Header style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ color: "white" }}>ArcVite 🌍⚡️</div>
+      <Header style={{ display: "flex", alignItems: "center", height: "50px", padding: "0 20px", overflow: "hidden" }}>
+        <div style={{ color: "white", padding: "0 5px"  }}>ArcVite 🌍⚡️</div>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -66,7 +66,7 @@ function App() {
         />
       </Header>
       {containerHandler()}
-      <Footer style={{ backgroundColor: blue, color: "white" }}>ArcVite 🌍⚡️</Footer>
+      <Footer style={{ backgroundColor: blue, color: "white", padding: "10px" }}>ArcVite 🌍⚡️</Footer>
     </Layout>
   );
 }
