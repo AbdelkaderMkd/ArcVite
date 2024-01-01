@@ -3,12 +3,21 @@ import { Content } from "antd/es/layout/layout";
 import WebScene from "@arcgis/core/WebScene";
 import SceneView from "@arcgis/core/views/SceneView";
 import Spinner from "../common/Spinner";
+import { Button } from "antd";
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
+import { addSketchViewModel } from "./SceneWidget/SketchViewModel";
 
 const SceneContainer = () => {
   const sceneDiv = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const initSceneViewer = () => {
+    // the layer where the graphics are sketched
+    const graphicsLayer = new GraphicsLayer({
+      elevationInfo: { mode: "on-the-ground" },
+      title: "Sketch GraphicsLayer",
+    });
+
     const webScene = new WebScene({
       // Define the web scene reference
       portalItem: {
@@ -31,6 +40,12 @@ const SceneContainer = () => {
       //   heading: 95, // direction the camera is looking
       //   tilt: 65 // tilt of the camera relative to the ground
     });
+
+    return { view, graphicsLayer };
+  };
+
+  useEffect(() => {
+    const { view, graphicsLayer } = initSceneViewer();
     view
       .when(() => {
         console.log("view loading..");
@@ -44,7 +59,10 @@ const SceneContainer = () => {
         setIsLoading(false);
       });
 
+    // addSketchViewModel(view, graphicsLayer);
+
     view.ui._removeComponents(["attribution"]);
+    // view.ui.add(<Button>logo</Button>, "top-right");
 
     return () => {
       console.log("psst clean up scence");
@@ -57,7 +75,6 @@ const SceneContainer = () => {
         view.destroy();
       }
     };
-
   }, []);
 
   return (

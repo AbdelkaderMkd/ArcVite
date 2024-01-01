@@ -6,6 +6,7 @@ import SceneContainer from "./SceneViewer/SceneContainer";
 import esriConfig from "@arcgis/core/config";
 import "./App.css";
 import StatisticContainer from "./Statistic/StatisticContainer";
+import CustomContainer from "./CustomViewer/CustomContainer";
 const blue = "#001528";
 const gray = "#242424";
 const apiKey = import.meta.env.VITE_ARCGIS_API_KEY;
@@ -28,6 +29,9 @@ function App() {
 
       case "statistic":
         return <StatisticContainer />;
+
+      // case "custom":
+      //   return <CustomContainer />;
 
       default:
         return <div>Not Found</div>;
@@ -62,11 +66,15 @@ function App() {
               key: "statistic",
               label: `Statistic`,
             },
+            {
+              key: "custom",
+              label: `Custom`,
+            },
           ]}
         />
       </Header>
       {containerHandler()}
-      <Footer style={{ backgroundColor: blue, color: "white", padding: "10px" }}>ArcVite 🌍⚡️</Footer>
+      {/* <Footer style={{ backgroundColor: blue, color: "white", padding: "10px" }}>ArcVite 🌍⚡️</Footer> */}
     </Layout>
   );
 }

@@ -15,6 +15,7 @@ This project is a viewer that displays a Web Map (and Scene) and demonstrates th
 - Display a Map
 - Change the Basemap Layer
 - Search bar
+- Sketch
 - Display a Scene
 -
 -
@@ -37,7 +38,7 @@ npm install
 npm start
 ```
 
-Server runs on http://localhost:2507
+Server runs on http://localhost:2500
 
 _NOTE: I suggest to use [pnpm](https://pnpm.io/) instead of [npm](https://www.npmjs.com/)_
 
@@ -46,6 +47,7 @@ _NOTE: I suggest to use [pnpm](https://pnpm.io/) instead of [npm](https://www.np
 - [@arcgis/core](https://www.npmjs.com/package/@arcgis/core)
 - [React](https://react.dev/)
 - [Ant Design](https://ant.design/)
+- [Calcite Design System](https://developers.arcgis.com/calcite-design-system/)
 - [Vitejs (SWC plugin)](https://vitejs.dev/)
 
 ## Credits
